@@ -41,6 +41,18 @@ The *Mental Health Tracker* is a web application designed to help users monitor 
 - *Breathing Exercises*: Follow the guided breathing exercises to help manage stress.
 - *AI Chatbot*: Engage with the chatbot for mental health support.
 
+## Screenshots
+- *Homepage*
+![homepage](https://github.com/user-attachments/assets/9cc51ff2-e1d7-441a-bad5-7ecd0c3ba1b9)
+- *Mood Tracker*
+![moodpage](https://github.com/user-attachments/assets/07eac6f6-a4ab-400c-a075-926232e8d071)
+- *Journal*
+![journalpage](https://github.com/user-attachments/assets/84986797-6e0d-424d-8d80-c8ecc6b2e792)
+- *Breathing Exercises*
+![breathePage](https://github.com/user-attachments/assets/dfe006f1-2acd-4943-a930-e6886e8d7561)
+- *AI Chatbot*
+![TherapistPage](https://github.com/user-attachments/assets/f2ce4976-a396-4540-98a6-22b1efc6238e)
+
 ## Future Enhancements (Open for Contribution)
 The following planned pages/components need implementation:
 - *Progress Dashboard* (progress.html):
