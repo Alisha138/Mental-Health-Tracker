@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mental Health Tracker - Mood Tracker</title>
+<style>
+  /* Reset and base styles */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, 'Geneva', Verdana, sans-serif;
+    background: linear-gradient(135deg, #c8d6e5, #f5f7fa);
+    color: #334d6e;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    flex: 1;
+    max-width: 900px;
+    margin: 30px auto 60px auto;
+    padding: 0 20px;
+  }
+  h1, h2 {
+    font-weight: 700;
+    color: #1a355e;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 2.8rem;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 2rem;
+    border-bottom: 3px solid #5a88c0;
+    padding-bottom: 8px;
+    margin-top: 48px;
+    margin-bottom: 16px;
+  }
+
+  /* Mood Selection Section */
+  #mood-selection {
+    background: white;
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-shadow: 0 10px 25px rgba(50, 70, 100, 0.1);
+  }
+  #mood-selection select,
+  #mood-selection textarea {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 10px 14px;
+    margin: 12px 0 24px 0;
+    border-radius: 12px;
+    border: 1.5px solid #a2b1cc;
+    transition: border-color 0.25s ease;
+    font-family: inherit;
+  }
+  #mood-selection select:focus,
+  #mood-selection textarea:focus {
+    outline: none;
+    border-color: #4a7be2;
+    box-shadow: 0 0 5px #4a7be2aa;
+  }
+  #submit-mood {
+    background: #4a7be2;
+    color: white;
+    border: none;
+    padding: 14px 0;
+    border-radius: 14px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(74, 123, 226, 0.5);
+    transition: background-color 0.3s ease;
+  }
+  #submit-mood:hover {
+    background: #3362cc;
+  }
+
+  /* Mood History Section */
+  #mood-history {
+    margin-top: 40px;
+    overflow-x: auto;
+    border-radius: 16px;
+    background: white;
+    padding: 20px 16px;
+    box-shadow: 0 10px 25px rgba(50, 70, 100, 0.1);
+  }
+  #mood-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  #mood-table th,
+  #mood-table td {
+    text-align: left;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e1e8f5;
+    font-size: 1rem;
+  }
+  #mood-table th {
+    background: #e9f0fe;
+    font-weight: 700;
+    color: #2f4a82;
+  }
+  #mood-table tr:hover {
+    background-color: #f2f6fd;
+  }
+  .delete-btn {
+    background: #e25959;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .delete-btn:hover {
+    background: #b73f3f;
+  }
+
+  /* Mood Reflection */
+  #mood-reflection {
+    margin-top: 48px;
+    background: white;
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-shadow: 0 10px 25px rgba(50, 70, 100, 0.1);
+  }
+  #reflection-note {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 16px 14px;
+    margin-top: 12px;
+    border-radius: 14px;
+    border: 1.5px solid #a2b1cc;
+    min-height: 120px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: border-color 0.25s ease;
+  }
+  #reflection-note:focus {
+    outline: none;
+    border-color: #4a7be2;
+    box-shadow: 0 0 6px #4a7be2cc;
+  }
+  #save-reflection {
+    margin-top: 16px;
+    background: #4a7be2;
+    color: white;
+    border: none;
+    padding: 14px 0;
+    border-radius: 14px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(74, 123, 226, 0.5);
+    transition: background-color 0.3s ease;
+  }
+  #save-reflection:hover {
+    background: #3362cc;
+  }
+
+  /* Additional creative section: Mood Tips */
+  #mood-tips {
+    margin-top: 48px;
+    background: #e9f0fe;
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-shadow: 0 8px 18px rgba(74, 123, 226, 0.2);
+  }
+  #mood-tips h2 {
+    color: #234981;
+    margin-bottom: 20px;
+  }
+  #mood-tips ul {
+    list-style: disc inside;
+    font-size: 1.1rem;
+    color: #34495e;
+    line-height: 1.6;
+  }
+  footer{
+    text-align:center; 
+    padding:20px; 
+    background:#e9f0fe; 
+    font-weight:600; 
+    color:#234981;
+  }
+  /* Responsive */
+  @media (max-width: 600px) {
+    main {
+      margin: 20px auto 40px auto;
+      padding: 0 15px;
+    }
+    #mood-table {
+      min-width: 100%;
+      font-size: 0.9rem;
+    }
+    #mood-selection, #mood-history, #mood-visualization, #mood-reflection, #mood-tips {
+      padding: 20px 15px;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Mental Health Mood Tracker</h1>
+
+  <section id="mood-selection" aria-labelledby="mood-selection-title">
+    <h2 id="mood-selection-title">Record Your Mood</h2>
+    <label for="mood-dropdown" class="sr-only">Select your current mood</label>
+    <select id="mood-dropdown" aria-describedby="mood-help">
+      <option value="" disabled selected>-- Select Your Mood --</option>
+      <option value="Happy">😊 Happy</option>
+      <option value="Sad">😢 Sad</option>
+      <option value="Anxious">😰 Anxious</option>
+      <option value="Angry">😠 Angry</option>
+      <option value="Relaxed">😌 Relaxed</option>
+      <option value="Excited">🤩 Excited</option>
+      <option value="Tired">😴 Tired</option>
+    </select>
+    <div id="mood-help" style="font-size: 0.85rem; color: #667d9a; margin-top: -12px; margin-bottom: 16px;">
+      Choose how you're feeling right now.
+    </div>
+
+    <label for="mood-note" class="sr-only">Optional mood notes</label>
+    <textarea id="mood-note" rows="3" placeholder="Write a short note or reflection..."></textarea>
+    <button id="submit-mood" aria-label="Save your mood entry">Save Mood</button>
+
+    <div id="notification" role="alert" style="
+      margin-top: 12px;
+      font-weight: 600;
+      color: #1a7c1a;
+      display:none;
+    "></div>
+  </section>
+
+  <section id="mood-history" aria-labelledby="mood-history-title">
+    <h2 id="mood-history-title">Your Mood History</h2>
+    <table id="mood-table" aria-describedby="mood-table-desc" role="grid">
+      <caption id="mood-table-desc" style="text-align:left; font-size: 0.9rem; padding-bottom:8px;">
+        Past mood entries with notes and dates.
+      </caption>
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>Mood</th>
+          <th>Note</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- JavaScript will insert entries here -->
+      </tbody>
+    </table>
+  </section>
+
+  <section id="mood-reflection" aria-labelledby="mood-reflection-title">
+    <h2 id="mood-reflection-title">Mood Reflection</h2>
+    <p>Take a moment to reflect on how your mood affects your day. Writing down thoughts can help bring clarity.</p>
+    <textarea id="reflection-note" rows="4" placeholder="Your reflection here..."></textarea>
+    <button id="save-reflection">Save Reflection</button>
+    <div id="reflection-notification" role="alert" style="
+      margin-top: 12px;
+      font-weight: 600;
+      color: #1a7c1a;
+      display:none;
+    "></div>
+  </section>
+
+  <section id="mood-tips" aria-labelledby="mood-tips-title">
+    <h2 id="mood-tips-title">Helpful Tips for Managing Your Mood</h2>
+    <ul>
+      <li>Practice deep breathing exercises when feeling anxious or stressed.</li>
+      <li>Take short breaks to rest and recharge during the day.</li>
+      <li>Keep a routine to help create stability and predictability.</li>
+      <li>Reach out to friends or family when you need support.</li>
+      <li>Maintain a balanced diet and stay hydrated.</li>
+      <li>Engage in physical activity regularly to boost mood.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  &copy; 2023 Mental Health Tracker. All rights reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(function(){
+    const moodSelect = $('#mood-dropdown');
+    const moodNote = $('#mood-note');
+    const moodTableBody = $('#mood-table tbody');
+    const submitButton = $('#submit-mood');
+    const notification = $('#notification');
+    const reflectionNote = $('#reflection-note');
+    const saveReflectionBtn = $('#save-reflection');
+    const reflectionNotification = $('#reflection-notification');
+
+    function getMoodHistory(){
+      return JSON.parse(localStorage.getItem('moodHistory')) || [];
+    }
+
+    function saveMoodHistory(data){
+      localStorage.setItem('moodHistory', JSON.stringify(data));
+    }
+
+    function renderMoodTable(){
+      const moods = getMoodHistory();
+      moodTableBody.empty();
+      if(moods.length === 0) {
+        moodTableBody.append('<tr><td colspan="4" style="text-align:center; color:#667d9a;">No mood records yet.</td></tr>');
+        return;
+      }
+      moods.forEach((entry, index) => {
+        moodTableBody.append(`
+          <tr>
+            <td>${entry.date}</td>
+            <td>${entry.mood}</td>
+            <td>${entry.note ? escapeHtml(entry.note) : '-'}</td>
+            <td>
+              <button class="delete-btn" aria-label="Delete entry from ${entry.date}" data-index="${index}">Delete</button>
+            </td>
+          </tr>
+        `);
+      });
+    }
+
+    function escapeHtml(text) {
+      return $('<div>').text(text).html();
+    }
+
+    function deleteMoodEntry(index) {
+      if (!confirm("Are you sure you want to delete this mood entry?")) return;
+      let moods = getMoodHistory();
+      moods.splice(index, 1);
+      saveMoodHistory(moods);
+      renderMoodTable();
+      updateMoodChart();
+      showNotification("Entry deleted.");
+    }
+
+    function showNotification(message, isError = false) {
+      notification.text(message).css('color', isError ? '#cc3c3c' : '#1a7c1a').fadeIn();
+      setTimeout(() => notification.fadeOut(), 3500);
+    }
+
+    function showReflectionNotification(message, isError = false) {
+      reflectionNotification.text(message).css('color', isError ? '#cc3c3c' : '#1a7c1a').fadeIn();
+      setTimeout(() => reflectionNotification.fadeOut(), 3500);
+    }
+
+    // Save mood entry
+    submitButton.on('click', () => {
+      const selectedMood = moodSelect.val();
+      const noteText = moodNote.val().trim();
+
+      if(!selectedMood) {
+        showNotification("Please select a mood before saving.", true);
+        return;
+      }
+
+      const newEntry = {
+        date: new Date().toLocaleString(),
+        mood: selectedMood,
+        note: noteText
+      };
+
+      let moodHistory = getMoodHistory();
+      moodHistory.push(newEntry);
+      saveMoodHistory(moodHistory);
+      moodNote.val('');
+      moodSelect.val('');
+      renderMoodTable();
+      updateMoodChart();
+      showNotification("Mood saved successfully!");
+    });
+
+    // Delete button functionality (event delegation)
+    moodTableBody.on('click', '.delete-btn', function() {
+      const index = $(this).data('index');
+      deleteMoodEntry(index);
+    });
+
+    // Handle reflection save
+    saveReflectionBtn.on('click', () => {
+      const reflectionText = reflectionNote.val().trim();
+      if (!reflectionText) {
+        showReflectionNotification("Please enter your reflection before saving.", true);
+        return;
+      }
+      // Save reflection in localStorage
+      localStorage.setItem('moodReflection', reflectionText);
+      reflectionNote.val('');
+      showReflectionNotification("Reflection saved. Thank you!");
+    });
+
+    // Load saved reflection on page load
+    const savedReflection = localStorage.getItem('moodReflection');
+    if(savedReflection) {
+      reflectionNote.val(savedReflection);
+    }
+
+    // Initial render
+    renderMoodTable();
+    updateMoodChart();
+
+  });
+</script>
+</body>
+</html>
